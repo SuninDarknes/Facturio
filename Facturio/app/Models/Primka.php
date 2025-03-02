@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Primka extends Model
 {
     protected $table = 'primke';
-    protected $fillable = ['dobavljac_id', 'datum', 'ukupna_cijena'];
+    protected $fillable = ['naziv','dobavljac_id', 'datum', 'pdv', 'ukupna_cijena'];
 
     // Relacija prema dobavljaču
     public function dobavljac()

@@ -14,7 +14,7 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import DialogComponent from '@/Components/DialogComponent';
+import DialogDodajOsobu from '@/components/DialogDodajOsobu';
 import Notification from '@/components/Notification';
 import { EditableTableRow } from '@/components/EditableTableRow';
 import { Osoba, PageProps } from '@/types';
@@ -47,15 +47,6 @@ export default function OsobeIndex() {
         reset();
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        post(route('osobe.store'), {
-            onSuccess: () => {
-                closeDialog();
-                setNotificationMessage('Osoba je uspješno dodana.');
-            },
-        });
-    };
 
     const handleEdit = (updatedData: any) => {
         setNotificationMessage('Osoba je uspješno ažurirana.');
@@ -70,7 +61,10 @@ export default function OsobeIndex() {
             });
         }
     };
-
+    const handleOsobaSuccess = () => {
+        setIsDialogOpen(false);
+        setNotificationMessage('Artikl je uspješno dodan.');
+    };
     const closeNotification = () => {
         setNotificationMessage(null);
     };
@@ -116,33 +110,11 @@ export default function OsobeIndex() {
                 />
 
                 {/* Dijalog za dodavanje nove osobe */}
-                <DialogComponent
+                <DialogDodajOsobu
                     isOpen={isDialogOpen}
                     onClose={closeDialog}
-                    title="Dodaj novu osobu"
-                    onSubmit={handleSubmit}
-                    submitButtonText="Spremi"
-                    cancelButtonText="Odustani"
-                    isProcessing={processing}
-                >
-                    <form onSubmit={handleSubmit}>
-                        <div className="space-y-4">
-                            {fields.map((field) => (
-                                <div key={field}>
-                                    <label>{field.charAt(0).toUpperCase() + field.slice(1)}</label>
-                                    <Input
-                                        type="text"
-                                        value={data[field]}
-                                        onChange={(e) => setData(field, e.target.value)}
-                                    />
-                                    {errors[field] && (
-                                        <span className="text-red-500 text-sm">{errors[field]}</span>
-                                    )}
-                                </div>
-                            ))}
-                        </div>
-                    </form>
-                </DialogComponent>
+                    onSuccess={handleOsobaSuccess}
+                />
 
                 {/* Tablica s listom osoba */}
                 <Table>

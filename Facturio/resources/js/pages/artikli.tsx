@@ -14,23 +14,25 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import DialogComponent from '@/Components/DialogComponent';
+import DialogDodajArtikl from '@/components/DialogDodajArtikl';
 import Notification from '@/components/Notification';
 import { EditableTableRow } from '@/components/EditableTableRow';
 import { Artikl, PageProps } from '@/types';
+import { Dialog, DialogContent, DialogTrigger } from '@radix-ui/react-dialog';
 
 export default function ArtikliIndex() {
     const { artikli, flash } = usePage<PageProps>().props;
     const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+
     const [notificationMessage, setNotificationMessage] = useState<string | null>(flash?.success || null);
     const [color, setColor] = useState<string>('bg-green-500');
     const [searchQuery, setSearchQuery] = useState<string>(''); // State for search query
-    const [opisFields, setOpisFields] = useState<{ key: string; value: string }[]>([]); // State for opis fields
 
     const { data, setData, post, processing, errors, reset } = useForm({
         naziv: '',
-        opis: '', // Opis će biti JSON objekt
-        jedinica_mjere: '',
+        opis: '',
+        cijena: '',
     });
 
     const { delete: destroy, processing: isDeleting } = useForm({});
@@ -45,31 +47,6 @@ export default function ArtikliIndex() {
     const closeDialog = () => {
         setIsDialogOpen(false);
         reset();
-        setOpisFields([]); // Reset opis fields
-    };
-
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-    
-        // Pretvori opisFields u JSON objekt
-        const opis = opisFields.reduce((acc, field) => {
-            acc[field.key] = field.value;
-            return acc;
-        }, {} as Record<string, string>);
-    
-        // Ažuriraj data objekt s opisom
-        setData({
-            ...data,
-            opis: JSON.stringify(opis), // Pretvori opis u string
-        });
-    
-        // Pošalji podatke na backend
-        post(route('artikli.store'), {
-            onSuccess: () => {
-                closeDialog();
-                setNotificationMessage('Artikl je uspješno dodan.');
-            },
-        });
     };
 
     const handleEdit = (updatedData: any) => {
@@ -85,6 +62,10 @@ export default function ArtikliIndex() {
             });
         }
     };
+    const handleArtiklSuccess = () => {
+        setIsDialogOpen(false);
+        setNotificationMessage('Artikl je uspješno dodan.');
+    };
 
     const closeNotification = () => {
         setNotificationMessage(null);
@@ -97,32 +78,15 @@ export default function ArtikliIndex() {
         },
     ];
 
-    const fields: (keyof typeof data)[] = ['naziv', 'jedinica_mjere'];
+
+
+    const fields: (keyof typeof data)[] = ['naziv', 'opis', 'cijena'];
 
     // Filter artikli based on search query
     const filteredArtikli = artikli.filter(artikl =>
         artikl.naziv.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        artikl.jedinica_mjere.toLowerCase().includes(searchQuery.toLowerCase())
+        artikl.opis.toLowerCase().includes(searchQuery.toLowerCase())
     );
-
-    // Dodaj novi opis field
-    const addOpisField = () => {
-        setOpisFields([...opisFields, { key: '', value: '' }]);
-    };
-
-    // Ukloni opis field
-    const removeOpisField = (index: number) => {
-        const newFields = [...opisFields];
-        newFields.splice(index, 1);
-        setOpisFields(newFields);
-    };
-
-    // Ažuriraj opis field
-    const updateOpisField = (index: number, key: string, value: string) => {
-        const newFields = [...opisFields];
-        newFields[index] = { key, value };
-        setOpisFields(newFields);
-    };
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -148,64 +112,11 @@ export default function ArtikliIndex() {
                 />
 
                 {/* Dijalog za dodavanje novog artikla */}
-                <DialogComponent
+                <DialogDodajArtikl
                     isOpen={isDialogOpen}
                     onClose={closeDialog}
-                    title="Dodaj novi artikl"
-                    onSubmit={handleSubmit}
-                    submitButtonText="Spremi"
-                    cancelButtonText="Odustani"
-                    isProcessing={processing}
-                >
-                    <form onSubmit={handleSubmit}>
-                        <div className="space-y-4">
-                            {fields.map((field) => (
-                                <div key={field}>
-                                    <label>{field.charAt(0).toUpperCase() + field.slice(1)}</label>
-                                    <Input
-                                        type="text"
-                                        value={data[field]}
-                                        onChange={(e) => setData(field, e.target.value)}
-                                    />
-                                    {errors[field] && (
-                                        <span className="text-red-500 text-sm">{errors[field]}</span>
-                                    )}
-                                </div>
-                            ))}
-
-                            {/* Opis fields */}
-                            <div>
-                                <label>Opis</label>
-                                {opisFields.map((field, index) => (
-                                    <div key={index} className="flex space-x-2 mb-2">
-                                        <Input
-                                            type="text"
-                                            placeholder="Naziv atributa"
-                                            value={field.key}
-                                            onChange={(e) => updateOpisField(index, e.target.value, field.value)}
-                                        />
-                                        <Input
-                                            type="text"
-                                            placeholder="Vrijednost atributa"
-                                            value={field.value}
-                                            onChange={(e) => updateOpisField(index, field.key, e.target.value)}
-                                        />
-                                        <Button
-                                            type="button"
-                                            onClick={() => removeOpisField(index)}
-                                            variant="destructive"
-                                        >
-                                            Ukloni
-                                        </Button>
-                                    </div>
-                                ))}
-                                <Button type="button" onClick={addOpisField} className="mt-2">
-                                    Dodaj atribut
-                                </Button>
-                            </div>
-                        </div>
-                    </form>
-                </DialogComponent>
+                    onSuccess={handleArtiklSuccess}
+                />
 
                 {/* Tablica s listom artikala */}
                 <Table>
@@ -216,7 +127,6 @@ export default function ArtikliIndex() {
                                     {field.charAt(0).toUpperCase() + field.slice(1)}
                                 </TableHead>
                             ))}
-                            <TableHead>Opis</TableHead>
                             <TableHead className="text-right">Akcije</TableHead>
                         </TableRow>
                     </TableHeader>
@@ -224,22 +134,18 @@ export default function ArtikliIndex() {
                         {filteredArtikli.map((artikl) => (
                             <EditableTableRow
                                 key={artikl.id}
-                                rowData={artikl}
+                                rowData={{
+                                    ...artikl,
+                                    cijena: artikl.cijene[0].cijena.toFixed(2),
+
+                                }}
                                 onEdit={handleEdit}
                                 handleSaveRoute='artikli.update'
                                 onDelete={() => handleDelete(artikl.id)}
                                 isDeleting={isDeleting}
                                 fields={fields}
-                                onRowClick={(rowData: Artikl) => {}}
-                            >
-                                <TableCell>
-                                    {artikl.opis && Object.entries(artikl.opis).map(([key, value]) => (
-                                        <div key={key}>
-                                            <strong>{key}:</strong> {value}
-                                        </div>
-                                    ))}
-                                </TableCell>
-                            </EditableTableRow>
+                                onRowClick={(rowData: Artikl) => { }}
+                            />
                         ))}
                     </TableBody>
                 </Table>

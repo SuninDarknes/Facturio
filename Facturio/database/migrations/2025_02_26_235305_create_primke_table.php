@@ -10,8 +10,10 @@ return new class extends Migration
     {
         Schema::create('primke', function (Blueprint $table) {
             $table->id();
+            $table->string('naziv', 100);
             $table->foreignId('dobavljac_id')->constrained('dobavljaci')->onDelete('cascade');
-            $table->dateTime('datum')->default(now());
+            $table->timestamp('datum')->useCurrent();
+            $table->decimal('pdv', 5, 2)->default(25);
             $table->decimal('ukupna_cijena', 10, 2);
             $table->timestamps();
         });

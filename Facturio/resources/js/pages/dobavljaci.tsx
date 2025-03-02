@@ -14,7 +14,7 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import DialogComponent from '@/Components/DialogComponent';
+import DialogDodajDobavljaca from '@/components/DialogDodajDobavljaca';
 import Notification from '@/components/Notification';
 import { EditableTableRow } from '@/components/EditableTableRow';
 import { Dobavljac, PageProps } from '@/types';
@@ -46,21 +46,15 @@ export default function DobavljaciIndex() {
         setIsDialogOpen(false);
         reset();
     };
-
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        post(route('dobavljaci.store'), {
-            onSuccess: () => {
-                closeDialog();
-                setNotificationMessage('Dobavljač je uspješno dodan.');
-            },
-        });
+    const handleDobavljacSuccess = () => {
+        setIsDialogOpen(false);
+        setNotificationMessage('Dobavljač je uspješno dodan.');
     };
-    
+
     const handleEdit = (updatedData: any) => {
         setNotificationMessage('Dobavljač je uspješno ažuriran.');
     };
-    
+
 
     const handleDelete = (id: number) => {
         if (confirm('Jeste li sigurni da želite obrisati ovog dobavljača?')) {
@@ -116,33 +110,11 @@ export default function DobavljaciIndex() {
                 />
 
                 {/* Dijalog za dodavanje novog dobavljača */}
-                <DialogComponent
+                <DialogDodajDobavljaca
                     isOpen={isDialogOpen}
-                    onClose={closeDialog}
-                    title="Dodaj novog dobavljača"
-                    onSubmit={handleSubmit}
-                    submitButtonText="Spremi"
-                    cancelButtonText="Odustani"
-                    isProcessing={processing}
-                >
-                    <form onSubmit={handleSubmit}>
-                        <div className="space-y-4">
-                            {fields.map((field) => (
-                                <div key={field}>
-                                    <label>{field.charAt(0).toUpperCase() + field.slice(1)}</label>
-                                    <Input
-                                        type="text"
-                                        value={data[field]}
-                                        onChange={(e) => setData(field, e.target.value)}
-                                    />
-                                    {errors[field] && (
-                                        <span className="text-red-500 text-sm">{errors[field]}</span>
-                                    )}
-                                </div>
-                            ))}
-                        </div>
-                    </form>
-                </DialogComponent>
+                    onClose={() => setIsDialogOpen(false)}
+                    onSuccess={handleDobavljacSuccess} // Osvježi podatke iz backend-a
+                />
 
                 {/* Tablica s listom dobavljača */}
                 <Table>
@@ -166,7 +138,7 @@ export default function DobavljaciIndex() {
                                 onDelete={() => handleDelete(dobavljac.id)}
                                 isDeleting={isDeleting}
                                 fields={fields}
-                                onRowClick={(rowData: Dobavljac) => {}}
+                                onRowClick={(rowData: Dobavljac) => { }}
 
                             />
                         ))}

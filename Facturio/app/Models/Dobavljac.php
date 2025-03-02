@@ -7,17 +7,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Dobavljac extends Model
 {
-    use SoftDeletes; // Omogućuje soft delete
-
-    // Naziv tablice u bazi podataka
+    use SoftDeletes;
     protected $table = 'dobavljaci';
 
-    // Polja koja se mogu masovno dodijeliti (mass assignment)
     protected $fillable = ['naziv', 'adresa', 'kontakt'];
-
-    // Polja koja trebaju biti skrivena prilikom serializacije (npr. API)
-    protected $hidden = [];
-
-    // Polja koja trebaju biti pretvorena u određene tipove (npr. datume)
-    protected $casts = [];
 }

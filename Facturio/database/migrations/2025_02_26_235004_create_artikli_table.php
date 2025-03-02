@@ -12,7 +12,6 @@ return new class extends Migration
             $table->id();
             $table->string('naziv');
             $table->text('opis')->nullable();
-            $table->string('jedinica_mjere');
             $table->timestamps();
             $table->softDeletes();
         });

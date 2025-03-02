@@ -44,18 +44,47 @@ export interface PageProps extends InertiaPageProps {
     dobavljaci: Dobavljac[];
     osobe: Osoba[];
     artikli: Artikl[];
+    primke: Primka[];
     flash: {
         success?: string;
     };
     errors: Error ;
     deferred?: Record<string, string[] | undefined>;
 }
+export interface Primka {
+    id: number;
+    naziv: string;
+    dobavljac_id: number;
+    datum: string;
+    pdv: number;
+    ukupna_cijena: number;
+    deleted_at: string | null;
+    dobavljac: Dobavljac;
+    stavke: StavkaPrimke[];
+}
+
+export interface StavkaPrimke {
+    id: number;
+    primka_id: number;
+    artikl_id: number;
+    kolicina: number;
+    cijena: number;
+    popust: number;
+    artikl: Artikl;
+}
 
 export interface Artikl {
     id: number;
     naziv: string;
-    opis: Record<string, string>; // Opis je JSON objekt
-    jedinica_mjere: string;
+    opis: string;
+    cijene: Cijena[];
+    deleted_at: string | null;
+}
+export interface Cijena {
+    id: number;
+    artikl_id: number;
+    cijena: number;
+    datum: string;
     deleted_at: string | null;
 }
 

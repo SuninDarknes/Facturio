@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Izdatnica extends Model
 {
     protected $table = 'izdatnice';
-    protected $fillable = ['datum', 'napomena'];
+    protected $fillable = ['naziv','datum', 'napomena'];
 
     // Relacija prema stavkama izdatnice
     public function stavke()

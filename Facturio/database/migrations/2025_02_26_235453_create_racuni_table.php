@@ -10,13 +10,14 @@ return new class extends Migration
     {
         Schema::create('racuni', function (Blueprint $table) {
             $table->id();
+            $table->string('naziv', 100);
             $table->foreignId('ponuda_id')->nullable()->constrained('ponude')->onDelete('set null');
             $table->foreignId('osoba_id')->constrained('osobe')->onDelete('cascade');
             $table->dateTime('datum')->default(now());
+            $table->decimal('pdv', 5, 2)->default(25);
             $table->string('nacin_placanja');
             $table->date('rok_placanja')->nullable();
             $table->text('dostava')->nullable();
-            $table->decimal('porez', 5, 2)->default(0);
             $table->timestamps();
         });
     }

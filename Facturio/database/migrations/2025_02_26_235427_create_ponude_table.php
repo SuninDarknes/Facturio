@@ -10,8 +10,10 @@ return new class extends Migration
     {
         Schema::create('ponude', function (Blueprint $table) {
             $table->id();
+            $table->string('naziv', 100);
             $table->foreignId('osoba_id')->constrained('osobe')->onDelete('cascade');
             $table->dateTime('datum')->default(now());
+            $table->decimal('pdv', 5, 2)->default(25);
             $table->decimal('ukupna_cijena', 10, 2);
             $table->timestamps();
         });

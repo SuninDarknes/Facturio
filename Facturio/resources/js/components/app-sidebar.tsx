@@ -17,6 +17,10 @@ const mainNavItems: NavItem[] = [
         title: 'Račun',
         url: '/racun',
         icon: ReceiptText,
+    },    {
+        title: 'Primke',
+        url: '/primke',
+        icon: ReceiptText,
     },
     {
         title: 'Dobavljači',
@@ -30,7 +34,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Artikli',
-        url: '/artikl',
+        url: '/artikli',
         icon: Package,
     }
 

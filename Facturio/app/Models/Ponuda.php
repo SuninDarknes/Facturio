@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Ponuda extends Model
 {
     protected $table = 'ponude';
-    protected $fillable = ['osoba_id', 'datum', 'ukupna_cijena'];
+    protected $fillable = ['naziv','osoba_id', 'datum', 'pdv', 'ukupna_cijena'];
 
     // Relacija prema osobi
     public function osoba()

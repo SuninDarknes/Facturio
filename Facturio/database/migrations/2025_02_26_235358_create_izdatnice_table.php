@@ -10,6 +10,7 @@ return new class extends Migration
     {
         Schema::create('izdatnice', function (Blueprint $table) {
             $table->id();
+            $table->string('naziv', 100);
             $table->dateTime('datum')->default(now());
             $table->text('napomena')->nullable();
             $table->timestamps();

@@ -29,7 +29,8 @@ class OsobaController extends Controller
 
         Osoba::create($request->all());
 
-        return redirect()->route('osobe.index')->with('success', 'Osoba je uspješno dodana.');
+        $osobe = Osoba::all();
+        return redirect()->back()->with('osobe', $osobe)->with('success', 'Osoba je uspješno dodana.');
     }
 
     // Ažuriranje osobe

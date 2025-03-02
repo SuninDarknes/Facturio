@@ -15,7 +15,6 @@ return new class extends Migration
             $table->integer('kolicina');
             $table->decimal('cijena', 10, 2);
             $table->decimal('popust', 5, 2)->default(0);
-            $table->decimal('porez', 5, 2)->default(0);
             $table->timestamps();
         });
     }

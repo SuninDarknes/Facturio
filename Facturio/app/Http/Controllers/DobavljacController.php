@@ -26,12 +26,13 @@ class DobavljacController extends Controller
             'adresa' => 'nullable|string|max:255',
             'kontakt' => 'nullable|string|max:255',
         ]);
-
-        Dobavljac::create($request->all());
-
-        return redirect()->route('dobavljaci.index')->with('success', 'Dobavljač je uspješno dodan.');
-    }
     
+        Dobavljac::create($request->all());
+    
+        // Vrati ažurirane podatke o dobavljačima
+        $dobavljaci = Dobavljac::all();
+        return redirect()->back()->with('dobavljaci', $dobavljaci)->with('success', 'Dobavljač je uspješno dodan.');
+    }
     public function update(Request $request, Dobavljac $dobavljac)
     {
         $request->validate([

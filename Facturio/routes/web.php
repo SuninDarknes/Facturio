@@ -31,10 +31,15 @@ Route::post('/osobe', [OsobaController::class, 'store'])->name('osobe.store');
 Route::put('/osobe/{osoba}', [OsobaController::class, 'update'])->name('osobe.update');
 Route::delete('/osobe/{osoba}', [OsobaController::class, 'destroy'])->name('osobe.destroy');
 
-Route::get('/artikl', [ArtiklController::class, 'index'])->name('artikli.index');
-Route::post('/artikl', [ArtiklController::class, 'store'])->name('artikli.store');
-Route::put('/artikl/{osoba}', [ArtiklController::class, 'update'])->name('artikli.update');
-Route::delete('/artikl/{osoba}', [ArtiklController::class, 'destroy'])->name('artikli.destroy');
+Route::get('/artikli', [ArtiklController::class, 'index'])->name('artikli.index');
+Route::post('/artikli', [ArtiklController::class, 'store'])->name('artikli.store');
+Route::put('/artikli/{artikl}', [ArtiklController::class, 'update'])->name('artikli.update');
+Route::delete('/artikli/{artikl}', [ArtiklController::class, 'destroy'])->name('artikli.destroy');
+
+Route::get('/primke', [PrimkaController::class, 'index'])->name('primke.index');
+Route::post('/primke', [PrimkaController::class, 'store'])->name('primke.store');
+Route::put('/primke/{primka}', [PrimkaController::class, 'update'])->name('primke.update');
+Route::delete('/primke/{primka}', [PrimkaController::class, 'destroy'])->name('primke.destroy');
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
