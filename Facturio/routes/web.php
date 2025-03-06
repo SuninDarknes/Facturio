@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ArtiklController;
 use App\Http\Controllers\PrimkaController;
 use App\Http\Controllers\IzdatnicaController;
@@ -15,9 +16,7 @@ Route::get('/', function () {
 })->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('dashboard', function () {
-        return Inertia::render('dashboard');
-    })->name('dashboard');
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
 
 // Prikaz stranice s dobavljačima
@@ -40,6 +39,12 @@ Route::get('/primke', [PrimkaController::class, 'index'])->name('primke.index');
 Route::post('/primke', [PrimkaController::class, 'store'])->name('primke.store');
 Route::put('/primke/{primka}', [PrimkaController::class, 'update'])->name('primke.update');
 Route::delete('/primke/{primka}', [PrimkaController::class, 'destroy'])->name('primke.destroy');
+
+Route::get('/racuni', [RacunController::class, 'index'])->name('racuni.index');
+Route::post('/racuni', [RacunController::class, 'store'])->name('racuni.store');
+Route::put('/racuni/{racun}', [RacunController::class, 'update'])->name('racuni.update');
+Route::delete('/racuni/{racun}', [RacunController::class, 'destroy'])->name('racuni.destroy');
+
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

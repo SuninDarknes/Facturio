@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Racun extends Model
 {
     protected $table = 'racuni';
-    protected $fillable = ['naziv','ponuda_id', 'osoba_id', 'datum','pdv', 'nacin_placanja', 'rok_placanja', 'dostava'];
+    protected $fillable = ['naziv','ponuda_id', 'osoba_id','ukupna_cijena', 'datum','pdv', 'nacin_placanja', 'rok_placanja', 'dostava'];
 
     // Relacija prema ponudi
     public function ponuda()

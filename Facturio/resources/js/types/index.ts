@@ -45,11 +45,36 @@ export interface PageProps extends InertiaPageProps {
     osobe: Osoba[];
     artikli: Artikl[];
     primke: Primka[];
+    racuni: Racun[];
     flash: {
         success?: string;
     };
     errors: Error ;
     deferred?: Record<string, string[] | undefined>;
+}
+
+export interface Racun {
+    id: number;
+    osoba_id: number;
+    naziv: string;
+    datum: string;
+    ukupna_cijena: number;
+    pdv: number;
+    nacin_placanja: string;
+    rok_placanja: string;
+    deleted_at: string | null;
+    osoba: Osoba;
+    stavke: StavkaRacuna[];
+}
+
+export interface StavkaRacuna {
+    id: number;
+    racun_id: number;
+    artikl_id: number;
+    kolicina: number;
+    cijena: number;
+    popust: number;
+    artikl: Artikl;
 }
 export interface Primka {
     id: number;

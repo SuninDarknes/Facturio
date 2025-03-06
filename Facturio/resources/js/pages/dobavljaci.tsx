@@ -14,7 +14,7 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import DialogDodajDobavljaca from '@/components/DialogDodajDobavljaca';
+import DialogDodajDobavljaca from '@/components/dodajDialog/DialogDodajDobavljaca';
 import Notification from '@/components/Notification';
 import { EditableTableRow } from '@/components/EditableTableRow';
 import { Dobavljac, PageProps } from '@/types';

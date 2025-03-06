@@ -23,18 +23,17 @@ import {
 } from '@/components/ui/dialog';
 import Notification from '@/components/Notification';
 import { EditableTableRow } from '@/components/EditableTableRow';
-import DialogDodajPrimku from '@/components/dodajDialog/DialogDodajPrimku';
-import { Primka, Dobavljac, PageProps } from '@/types';
+import DialogDodajRacun from '@/components/dodajDialog/DialogDodajRacun';
+import { Racun, Osoba, PageProps } from '@/types';
 
-export default function PrimkeIndex() {
-    const { primke, flash } = usePage<PageProps>().props;
+export default function RacuniIndex() {
+    const { racuni, flash } = usePage<PageProps>().props;
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [isDetailsDialogOpen, setIsDetailsDialogOpen] = useState(false);
-    const [selectedPrimka, setSelectedPrimka] = useState<Primka | null>(null);
+    const [selectedRacun, setSelectedRacun] = useState<Racun | null>(null);
     const [notificationMessage, setNotificationMessage] = useState<string | null>(flash?.success || null);
     const [color, setColor] = useState<string>('bg-green-500');
     const [searchQuery, setSearchQuery] = useState<string>(''); // State for search query
-
 
     const { delete: destroy, processing: isDeleting } = useForm({});
 
@@ -47,31 +46,29 @@ export default function PrimkeIndex() {
     const openDialog = () => setIsDialogOpen(true);
     const closeDialog = () => setIsDialogOpen(false);
 
-    const openDetailsDialog = (primka: Primka) => {
-        setSelectedPrimka(primka);
+    const openDetailsDialog = (racun: Racun) => {
+        setSelectedRacun(racun);
         setIsDetailsDialogOpen(true);
     };
 
     const closeDetailsDialog = () => {
         setIsDetailsDialogOpen(false);
-        setSelectedPrimka(null);
+        setSelectedRacun(null);
     };
 
-
     const handleEdit = (updatedData: any) => {
-        setNotificationMessage('Primka je uspješno ažurirana.');
+        setNotificationMessage('Račun je uspješno ažuriran.');
     };
 
     const handleDelete = (id: number) => {
-        if (confirm('Jeste li sigurni da želite obrisati ovu primku?')) {
-            destroy(route('primke.destroy', id), {
+        if (confirm('Jeste li sigurni da želite obrisati ovaj račun?')) {
+            destroy(route('racuni.destroy', id), {
                 onSuccess: () => {
-                    setNotificationMessage('Primka je uspješno obrisana.');
+                    setNotificationMessage('Račun je uspješno obrisan.');
                 },
             });
         }
     };
-
 
     const closeNotification = () => {
         setNotificationMessage(null);
@@ -79,67 +76,66 @@ export default function PrimkeIndex() {
 
     const breadcrumbs: BreadcrumbItem[] = [
         {
-            title: 'Primke',
-            href: '/primke',
+            title: 'Računi',
+            href: '/racuni',
         },
     ];
 
-    const fields: (string)[] = ['naziv', 'dobavljac', 'datum','cijena_bez_pdv','pdv','cijena_pdv', 'ukupna_cijena'];
+    const fields: (string)[] = ['naziv', 'osoba', 'datum', 'cijena_bez_pdv','pdv','cijena_pdv','ukupna_cijena'];
 
-    // Filter primke based on search query
-    const filteredPrimke = primke.filter(primka =>
-        primka.dobavljac.naziv.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        primka.datum.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        primka.ukupna_cijena.toString().includes(searchQuery.toLowerCase())
+    // Filter racuni based on search query
+    const filteredRacuni = racuni.filter(racun =>
+        racun.osoba.ime.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        racun.datum.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        racun.ukupna_cijena.toString().includes(searchQuery.toLowerCase())
     );
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Primke" />
+            <Head title="Računi" />
             <div className="p-6">
-                <h1 className="text-2xl font-bold mb-4">Primke</h1>
+                <h1 className="text-2xl font-bold mb-4">Računi</h1>
 
                 {/* Notifikacija */}
                 <Notification message={notificationMessage} color={color} onClose={closeNotification} />
 
                 {/* Gumb za otvaranje dijaloga */}
                 <Button onClick={openDialog} className="mb-4">
-                    Dodaj novu primku
+                    Dodaj novi račun
                 </Button>
 
                 {/* Search Input */}
                 <Input
                     type="text"
-                    placeholder="Pretraži primke..."
+                    placeholder="Pretraži račune..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="mb-4"
                 />
 
-                {/* Dijalog za dodavanje nove primke */}
-                <DialogDodajPrimku
+                {/* Dijalog za dodavanje novog računa */}
+                <DialogDodajRacun
                     isOpen={isDialogOpen}
                     onClose={() => setIsDialogOpen(false)}
                     onSuccess={(message) => setNotificationMessage(message)}
                 />
 
-
-                {/* Dijalog za prikaz detalja primke */}
+                {/* Dijalog za prikaz detalja računa */}
                 <Dialog open={isDetailsDialogOpen} onOpenChange={closeDetailsDialog}>
                     <DialogContent className='max-w-300'>
                         <DialogHeader>
-                            <DialogTitle>{selectedPrimka?.naziv}</DialogTitle>
+                            <DialogTitle>{selectedRacun?.naziv}</DialogTitle>
                         </DialogHeader>
-                        {selectedPrimka && (
+                        {selectedRacun && (
                             <div className="space-y-4">
                                 <div>
-                                    <strong>Dobavljač:</strong> {selectedPrimka.dobavljac.naziv}
+                                    <strong>Osoba:</strong> {selectedRacun.osoba.ime + " " + selectedRacun.osoba.prezime}
                                 </div>
                                 <div>
-                                    <strong>Datum:</strong> {selectedPrimka.datum}
+                                    <strong>Datum:</strong> {selectedRacun.datum}
                                 </div>
                                 <div>
-                                    <strong>Ukupna cijena:</strong> {selectedPrimka.ukupna_cijena}
+                                    <strong>Ukupna cijena:</strong> {selectedRacun.ukupna_cijena}
                                 </div>
                                 <div>
                                     <strong>Stavke:</strong>
@@ -155,7 +151,7 @@ export default function PrimkeIndex() {
                                             </TableRow>
                                         </TableHeader>
                                         <TableBody>
-                                            {selectedPrimka.stavke?.map((stavka) => (
+                                            {selectedRacun.stavke?.map((stavka) => (
                                                 <TableRow key={stavka.id}>
                                                     <TableCell>{stavka.artikl.naziv}</TableCell>
                                                     <TableCell>{stavka.kolicina}</TableCell>
@@ -170,24 +166,24 @@ export default function PrimkeIndex() {
                                 </div>
                                 <div className='flex justify-end mt-4'>
                                     <div className='grid grid-cols-2 gap-4 '>
-                                    <div className='text-left'>
+                                        <div className='text-left'>
                                             <strong>Cijena:</strong>
                                         </div>
                                         <div className='text-left'>
-                                            { selectedPrimka.stavke.reduce((acc, stavka) => acc + stavka.kolicina * stavka.cijena, 0) + " €"}
+                                            {selectedRacun.stavke.reduce((acc, stavka) => acc + stavka.kolicina * stavka.cijena, 0) + " €"}
                                         </div>
 
                                         <div className='text-left'>
-                                            <strong>PDV {selectedPrimka.pdv + "%"}: </strong>
+                                            <strong>PDV {selectedRacun.pdv + "%"}: </strong>
                                         </div>
                                         <div className='text-left'>
-                                            {selectedPrimka.stavke.reduce((acc, stavka) => acc + stavka.kolicina * stavka.cijena * (selectedPrimka.pdv / 100), 0) + " €"}
+                                            {selectedRacun.stavke.reduce((acc, stavka) => acc + stavka.kolicina * stavka.cijena * (selectedRacun.pdv / 100), 0) + " €"}
                                         </div>
                                         <div className='text-left'>
                                             <strong>Ukupno:</strong>
                                         </div>
                                         <div className='text-left'>
-                                            {selectedPrimka.ukupna_cijena + " €"}
+                                            {selectedRacun.ukupna_cijena + " €"}
                                         </div>
                                     </div>
                                 </div>
@@ -199,30 +195,30 @@ export default function PrimkeIndex() {
                     </DialogContent>
                 </Dialog>
 
-                {/* Tablica s listom primki */}
+                {/* Tablica s listom računa */}
                 <Table>
                     <TableHeader>
                         <TableRow>
                             {fields.map((field) => (
                                 <TableHead key={field}>
-                                    {field.charAt(0).toUpperCase()+ field.slice(1).replaceAll("_"," ") }
+                                    {field.charAt(0).toUpperCase() + field.slice(1).replaceAll("_", " ")}
                                 </TableHead>
                             ))}
                             <TableHead className="text-right">Akcije</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {filteredPrimke.map((primka: Primka) => (
+                        {filteredRacuni.map((racun: Racun) => (
                             <EditableTableRow
-                                key={primka.id}
+                                key={racun.id}
                                 rowData={{
-                                    ...primka,
-                                    dobavljac: primka.dobavljac.naziv,
-                                    cijena_bez_pdv: primka.stavke.reduce((acc, stavka) => acc + stavka.kolicina * stavka.cijena * (1-stavka.popust/100), 0).toFixed(2) + " €", 
-                                    pdv: primka.pdv + " %",
-                                    cijena_pdv: (primka.ukupna_cijena - primka.stavke.reduce((acc, stavka) => acc + stavka.kolicina * stavka.cijena * (1-stavka.popust/100), 0)).toFixed(2) + " €",
-                                    ukupna_cijena: primka.ukupna_cijena + " €",
-                                    datum: new Date(primka.datum).toLocaleString('en-GB', {
+                                    ...racun,
+                                    osoba: racun.osoba.ime + " " + racun.osoba.prezime,
+                                    cijena_bez_pdv: racun.stavke.reduce((acc, stavka) => acc + stavka.kolicina * stavka.cijena * (1-stavka.popust/100), 0).toFixed(2) + " €", 
+                                    pdv: racun.pdv + " %",
+                                    cijena_pdv: (racun.ukupna_cijena - racun.stavke.reduce((acc, stavka) => acc + stavka.kolicina * stavka.cijena * (1-stavka.popust/100), 0)).toFixed(2) + " €",
+                                    ukupna_cijena: racun.ukupna_cijena + " €",
+                                    datum: new Date(racun.datum).toLocaleString('en-GB', {
                                         day: '2-digit',
                                         month: '2-digit',
                                         year: 'numeric',
@@ -231,11 +227,11 @@ export default function PrimkeIndex() {
                                     }), // Format date as MM:HH DD/MM/YYYY
                                 }}
                                 onEdit={handleEdit}
-                                handleSaveRoute='primke.update'
-                                onDelete={() => handleDelete(primka.id)}
+                                handleSaveRoute='racuni.update'
+                                onDelete={() => handleDelete(racun.id)}
                                 isDeleting={isDeleting}
                                 fields={fields}
-                                onRowClick={() => openDetailsDialog(primka)}
+                                onRowClick={() => openDetailsDialog(racun)}
                             />
                         ))}
                     </TableBody>

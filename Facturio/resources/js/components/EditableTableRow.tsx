@@ -1,7 +1,7 @@
 // components/EditableTableRow.tsx
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import DialogComponent from '@/Components/DialogComponent';
+import DialogComponent from '@/components/DialogComponent';
 import { useForm } from '@inertiajs/react';
 import { Input } from '@/components/ui/input';
 import { PencilIcon, Trash2 } from "lucide-react"

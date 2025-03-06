@@ -13,8 +13,9 @@ import { TableRow, TableCell, Table, TableBody, TableHeader, TableHead } from '@
 
 import { useForm, usePage } from '@inertiajs/react';
 import { Dobavljac, Artikl, PageProps } from '@/types';
-import DialogDodajDobavljaca from '@/components/DialogDodajDobavljaca';
-import DialogDodajArtikl from '@/components/DialogDodajArtikl'; // Import dijaloga za dodavanje artikla
+import DialogDodajDobavljaca from './DialogDodajDobavljaca';
+import DialogDodajArtikl from './DialogDodajArtikl'; // Import dijaloga za dodavanje artikla
+import { useSpring, animated } from '@react-spring/web';
 
 interface DialogDodajPrimkuProps {
     isOpen: boolean;
@@ -110,6 +111,15 @@ export default function DialogDodajPrimku({
                 , 0)
         );
     };
+const animatedUkupnoBezPdv = useSpring({
+    number: ukupnaCijena,
+    from: { number: 0 }
+});
+
+    const animatedUkupno = useSpring({ 
+        number: ukupnaCijena * (1 + Number(data.pdv) / 100), 
+        from: { number: 0 } 
+    });
 
     return (
         <>
@@ -284,10 +294,13 @@ export default function DialogDodajPrimku({
                                         Dodaj stavku
                                     </Button>
 
-                                    <div>
-                                    <span className="font-bold">
-                                            Ukupno: {ukupnaCijena.toFixed(2)} €
-                                        </span>
+                                    <div>Ukupno: 
+                                    <animated.span className="font-bold">
+                                            {useSpring({
+    number: ukupnaCijena,
+    from: { number: 0 }
+}).number.to((n) => n.toFixed(2))}
+                                        </animated.span>€
                                         <div className='flex justify-center'>
                                             <label>PDV</label>
                                             <Input
@@ -300,7 +313,11 @@ export default function DialogDodajPrimku({
                                             )}
                                         </div>
                                         <span className="font-bold">
-                                            Ukupno: {(ukupnaCijena * (1+ Number(data.pdv)/100)).toFixed(2)} €
+                                      
+
+                                            <animated.span>
+                                                {animatedUkupno.number.to((n) => n.toFixed(2))}
+                                            </animated.span>€
                                         </span>
                                     </div>
                                 </div>

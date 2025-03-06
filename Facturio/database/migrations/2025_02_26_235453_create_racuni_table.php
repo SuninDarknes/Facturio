@@ -13,6 +13,7 @@ return new class extends Migration
             $table->string('naziv', 100);
             $table->foreignId('ponuda_id')->nullable()->constrained('ponude')->onDelete('set null');
             $table->foreignId('osoba_id')->constrained('osobe')->onDelete('cascade');
+            $table->decimal('ukupna_cijena', 10, 2);
             $table->dateTime('datum')->default(now());
             $table->decimal('pdv', 5, 2)->default(25);
             $table->string('nacin_placanja');

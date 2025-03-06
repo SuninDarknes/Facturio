@@ -15,7 +15,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Račun',
-        url: '/racun',
+        url: '/racuni',
         icon: ReceiptText,
     },    {
         title: 'Primke',
@@ -43,12 +43,12 @@ const mainNavItems: NavItem[] = [
 const footerNavItems: NavItem[] = [
     {
         title: 'Repository',
-        url: 'https://github.com/laravel/react-starter-kit',
+        url: 'https://github.com/SuninDarknes/Facturio',
         icon: Folder,
     },
     {
         title: 'Documentation',
-        url: 'https://laravel.com/docs/starter-kits',
+        url: 'https://github.com/SuninDarknes/Facturio',
         icon: BookOpen,
     },
 ];

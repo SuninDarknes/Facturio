@@ -14,7 +14,7 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import DialogDodajOsobu from '@/components/DialogDodajOsobu';
+import DialogDodajOsobu from '@/components/dodajDialog/DialogDodajOsobu';
 import Notification from '@/components/Notification';
 import { EditableTableRow } from '@/components/EditableTableRow';
 import { Osoba, PageProps } from '@/types';
